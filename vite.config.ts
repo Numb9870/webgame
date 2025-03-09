@@ -17,9 +17,20 @@ import { defineConfig } from 'vite';
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  // 配置路径别名
+  resolve: {
+    alias: {
+      '@': path.resolve(process.cwd(), 'src'),
+      '~': path.resolve(process.cwd()),
+    },
+  },
+  // 插件配置
   plugins: [
+    // 添加 vue 支持
     vue(),
+    // 添加vue-devtools
     VueDevTools(),
+    // 自动导入
     AutoImport({
       imports: [
         'vue',
@@ -34,6 +45,7 @@ export default defineConfig({
         },
       ],
     }),
+    // 组件自动按需引入
     Components({
       resolvers: [NaiveUiResolver()],
     }),
