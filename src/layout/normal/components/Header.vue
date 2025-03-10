@@ -1,6 +1,10 @@
 <template>
     <div class="header">
         <TablerLayoutSidebarLeftCollapse color="#18a058" font-size="1rem" />
+        <div>
+            <n-button type="info" text>注册</n-button>
+            <n-button type="info" text>登陆</n-button>
+        </div>
     </div>
 </template>
 
