@@ -1,5 +1,6 @@
 import vue from '@vitejs/plugin-vue';
 import tailwindcss from '@tailwindcss/vite';
+import Icons from 'unplugin-icons/vite';
 
 import createAutoImport from './auto-import';
 import createComponents from './components';
@@ -11,7 +12,14 @@ import creatResolve from './aliases';
  */
 export default function pluginInit() {
   // vite插件，用于支持在Vite中Vue的开发
-  const vitePlugins = [vue(), tailwindcss()];
+  const vitePlugins = [
+    vue(),
+    tailwindcss(),
+    Icons({
+      compiler: 'vue3', // 指定编译器
+      autoInstall: true, // 自动安装
+    }),
+  ];
   // 自动导入API，减少手动导入的繁琐
   vitePlugins.push(createAutoImport());
   // 自动导入组件API，提升开发效率

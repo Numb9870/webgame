@@ -1,9 +1,12 @@
 <template>
-    <div class="header">1212</div>
+    <div class="header">
+        <TablerLayoutSidebarLeftCollapse color="#18a058" font-size="1rem" />
+    </div>
 </template>
 
 <script setup lang='ts'>
-
+import TablerLayoutSidebarLeftCollapse from '~icons/tabler/layout-sidebar-left-collapse'
+// import TablerLayoutSidebarRightCollapse from '~icons/tabler/layout-sidebar-right-collapse'
 </script>
 
 <style lang="scss" scoped>
