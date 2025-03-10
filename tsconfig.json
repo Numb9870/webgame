@@ -25,6 +25,12 @@
       ],
       "@css/*": [
         "src/assets/css/*"
+      ],
+      "@image/*": [
+        "src/assets/image/*"
+      ],
+      "@js/*": [
+        "src/assets/js/*"
       ]
     },
     /* 构建缓存 */

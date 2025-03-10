@@ -3,10 +3,8 @@ import App from './App.vue';
 import { setupRouter } from '@/router/index.ts';
 import './style.css';
 
-// 通用字体
-import 'vfonts/Lato.css';
-// 等宽字体
-import 'vfonts/FiraCode.css';
+// 引入iconfont 图标
+import '@/assets/js/iconfont.js';
 
 // 创建Vue应用
 const app = createApp(App);
