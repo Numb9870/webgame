@@ -1,0 +1,23 @@
+{
+  "register": "注册",
+  "login": "登录",
+  "sidebar": {
+    "ActionGames": "动作游戏",
+    "RPG": "角色扮演",
+    "StrategyGames": "策略游戏",
+    "AdventureGames": "冒险游戏",
+    "SimulationGames": "模拟游戏",
+    "SportsGames": "体育游戏",
+    "FightingGames": "格斗游戏",
+    "PuzzleGames": "益智游戏",
+    "MusicGames": "音乐游戏",
+    "MMO": "多人在线",
+    "IndieGames": "独立游戏",
+    "SandboxGames": "沙盒游戏",
+    "CasualGames": "休闲游戏",
+    "Roguelike": "肉鸽游戏"
+  },
+  "popover": {
+    "themeChange": "刷新页面时，会重新获取系统主题。"
+  }
+}

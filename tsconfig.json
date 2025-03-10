@@ -23,14 +23,20 @@
       "@store/*": [
         "src/store/*"
       ],
-      "@css/*": [
-        "src/assets/css/*"
+      "@locales/*": [
+        "src/locales/*"
       ],
-      "@image/*": [
-        "src/assets/image/*"
+      "@mitt/*": [
+        "src/utils/mitt/*"
       ],
-      "@js/*": [
-        "src/assets/js/*"
+      "@utils/*": [
+        "src/utils/*"
+      ],
+      "@PuzzleGames/*": [
+        "src/view/PuzzleGames/*"
+      ],
+      "@common/*": [
+        "src/components/common/*"
       ]
     },
     /* 构建缓存 */

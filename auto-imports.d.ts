@@ -7,7 +7,9 @@
 export {}
 declare global {
   const EffectScope: typeof import('vue')['EffectScope']
+  const NDateLocale: typeof import('naive-ui')['NDateLocale']
   const NIcon: typeof import('naive-ui')['NIcon']
+  const NLocale: typeof import('naive-ui')['NLocale']
   const acceptHMRUpdate: typeof import('pinia')['acceptHMRUpdate']
   const computed: typeof import('vue')['computed']
   const createApp: typeof import('vue')['createApp']

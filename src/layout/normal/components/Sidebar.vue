@@ -10,36 +10,113 @@
 </template>
 
 <script setup lang='ts'>
+import { useI18n } from 'vue-i18n';
+import { RouterLink } from 'vue-router';
 
-// 使用router
+/* *********************************************实例化********************************************* */
+// 引入router
 const router = useRouter()
+// 引入i18n
+const { t } = useI18n();
 
+
+/* *********************************************菜单配置********************************************* */
 // 渲染图标 
 function renderIconFont(iconName: string) {
     return () => h('svg', { class: 'iconfont', 'aria-hidden': true }, h('use', { "xlink:href": `#${iconName}` }, () => ''))
 }
-
+// 菜单配置
 const menuOptions = [
     {
-        label: '动作游戏',
-        key: 'pinball-1973',
+        label: () => h('span', {}, { default: () => t('sidebar.ActionGames') }),
+        key: 'ActionGames',
         icon: renderIconFont("icon-ActionGames"),
     },
     {
-        label: '角色扮演',
-        key: 'pinball-1973',
+        label: () => h('span', {}, { default: () => t('sidebar.RPG') }),
+        key: 'RPG',
         icon: renderIconFont("icon-RPG"),
+    },
+    {
+        label: () => h('span', {}, { default: () => t('sidebar.StrategyGames') }),
+        key: 'StrategyGames',
+        icon: renderIconFont("icon-StrategyGames"),
+    },
+    {
+        label: () => h('span', {}, { default: () => t('sidebar.AdventureGames') }),
+        key: 'AdventureGames',
+        icon: renderIconFont("icon-AdventureGames"),
+    },
+    {
+        label: () => h('span', {}, { default: () => t('sidebar.SimulationGames') }),
+        key: 'SimulationGames',
+        icon: renderIconFont("icon-SimulationGames"),
+    },
+    {
+        label: () => h('span', {}, { default: () => t('sidebar.SportsGames') }),
+        key: 'SportsGames',
+        icon: renderIconFont("icon-SportsGames"),
+    },
+    {
+        label: () => h('span', {}, { default: () => t('sidebar.FightingGames') }),
+        key: 'FightingGames',
+        icon: renderIconFont("icon-FightingGames"),
+    },
+    {
+        label: () => h(
+            RouterLink,
+            {
+                to: {
+                    name: 'PuzzleGames',
+                }
+            },
+            { default: () => t('sidebar.PuzzleGames') }
+        ),
+        key: 'PuzzleGames',
+        icon: renderIconFont("icon-PuzzleGames"),
+    },
+    {
+        label: () => h('span', {}, { default: () => t('sidebar.MusicGames') }),
+        key: 'MusicGames',
+        icon: renderIconFont("icon-MusicGames"),
+    },
+    {
+        label: () => h('span', {}, { default: () => t('sidebar.MMO') }),
+        key: 'MMO',
+        icon: renderIconFont("icon-MMO"),
+    },
+    {
+        label: () => h('span', {}, { default: () => t('sidebar.IndieGames') }),
+        key: 'IndieGames',
+        icon: renderIconFont("icon-IndieGames"),
+    },
+    {
+        label: () => h('span', {}, { default: () => t('sidebar.SandboxGames') }),
+        key: 'SandboxGames',
+        icon: renderIconFont("icon-SandboxGames"),
+    },
+    {
+        label: () => h('span', {}, { default: () => t('sidebar.CasualGames') }),
+        key: 'CasualGames',
+        icon: renderIconFont("icon-CasualGames"),
+    },
+    {
+        label: () => h('span', {}, { default: () => t('sidebar.Roguelike') }),
+        key: 'Roguelike',
+        icon: renderIconFont("icon-Roguelike"),
     },
 ]
 
 
 </script>
+
 <style lang="scss" scoped>
 .sidebar {
     width: 200px;
     height: 100%;
     border-right: 1px solid #18a058;
     overflow: hidden;
+    transition: all 0.3s ease-in-out;
 
     .sidebar-logo {
         cursor: pointer;

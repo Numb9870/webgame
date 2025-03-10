@@ -1,0 +1,23 @@
+{
+  "register": "register",
+  "login": "login",
+  "sidebar": {
+    "ActionGames": "ActionGames",
+    "RPG": "RPG",
+    "StrategyGames": "StrategyGames",
+    "AdventureGames": "AdventureGames",
+    "SimulationGames": "SimulationGames",
+    "SportsGames": "SportsGames",
+    "FightingGames": "FightingGames",
+    "PuzzleGames": "PuzzleGames",
+    "MusicGames": "MusicGames",
+    "MMO": "MMO",
+    "IndieGames": "IndieGames",
+    "SandboxGames": "SandboxGames",
+    "CasualGames": "CasualGames",
+    "Roguelike": "Roguelike"
+  },
+  "popover": {
+    "themeChange": "When you refresh the page, you get the system theme again."
+  }
+}
