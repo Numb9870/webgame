@@ -1,7 +1,51 @@
 {
-  "files": [],
-  "references": [
-    { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" }
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@assets/*": [
+        "src/assets/*"
+      ],
+      "@components/*": [
+        "src/components/*"
+      ],
+      "@layout/*": [
+        "src/layout/*"
+      ],
+      "@router/*": [
+        "src/router/*"
+      ],
+      "@view/*": [
+        "src/view/*"
+      ],
+      "@/*": [
+        "src/*"
+      ],
+      "@store/*": [
+        "src/store/*"
+      ],
+      "@css/*": [
+        "src/assets/css/*"
+      ]
+    },
+    /* 构建缓存 */
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedSideEffectImports": true,
+    /* 类型支持 */
+    "types": [
+      "naive-ui/volar"
+    ]
+  },
+  "extends": "@vue/tsconfig/tsconfig.dom.json",
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/**/*.vue",
+    "src/**/*.d.ts",
+    "*.d.ts"
   ]
 }
