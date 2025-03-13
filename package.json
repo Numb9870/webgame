@@ -1,7 +1,7 @@
 {
   "name": "webgame",
   "private": true,
-  "version": "0.0.9",
+  "version": "0.0.10",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@css-render/vue3-ssr": "^0.15.14",
     "@iconify/json": "^2.2.314",
     "@intlify/unplugin-vue-i18n": "^6.0.3",
     "mitt": "^3.0.1",
