@@ -9,6 +9,7 @@ export default defineConfig(({ command, mode }) => {
   // console.log('🚀 ~ defineConfig ~ command, mode, env:', command, mode, env);
   console.log('🚀 ~ defineConfig ~ command, mode:', command, mode);
   return {
+    base: env.VITE_APP_BASE_URL,
     plugins: pluginInit(),
     server: serverInit(env),
   };
