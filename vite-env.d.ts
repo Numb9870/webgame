@@ -15,3 +15,5 @@ interface ImportMetaEnv {
   readonly VITE_PROD_SERVER_URL: string;
   // 更多环境变量...
 }
+
+declare module 'dayjs-plugin-utc';

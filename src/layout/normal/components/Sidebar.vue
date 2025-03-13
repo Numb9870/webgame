@@ -113,6 +113,7 @@ const menuOptions = [
 <style lang="scss" scoped>
 .sidebar {
     width: 200px;
+    min-width: 200px;
     height: 100%;
     border-right: 1px solid #18a058;
     overflow: hidden;

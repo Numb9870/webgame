@@ -26,7 +26,7 @@ export const constantRoutes = [
       {
         path: '/PuzzleGames/GluttonousSnake',
         name: 'GluttonousSnake',
-        component: () => import('@/view/PuzzleGames/GluttonousSnake.vue'),
+        component: () => import('@view/PuzzleGames/GluttonousSnake/GluttonousSnake.vue'),
       },
     ],
   },

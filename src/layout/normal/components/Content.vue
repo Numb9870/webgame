@@ -14,12 +14,14 @@ import Header from './Header.vue'
 <style lang="scss" scoped>
 .content {
     width: calc(100vw - 200px);
+    min-width: 1000px;
     height: 100vh;
 
     .content-view {
         width: calc(100vw - 200px);
+        min-width: 1000px;
         height: calc(100vh - 60px);
-        padding: 20px;
+        padding: 10px;
     }
 }
 </style>

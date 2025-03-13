@@ -37,6 +37,12 @@
       ],
       "@common/*": [
         "src/components/common/*"
+      ],
+      "@cacluate/*": [
+        "src/utils/cacluate/*"
+      ],
+      "@calculate/*": [
+        "src/utils/calculate/*"
       ]
     },
     /* 构建缓存 */
