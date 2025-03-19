@@ -19,5 +19,11 @@
   },
   "popover": {
     "themeChange": "When you refresh the page, you get the system theme again."
+  },
+  "game_terms": {
+    "start": "start",
+    "stop": "stop",
+    "restart": "restart",
+    "gameRule": "game rule"
   }
 }

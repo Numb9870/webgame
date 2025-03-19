@@ -59,6 +59,9 @@
       "naive-ui/volar",
       /* 图标集 */
       "unplugin-icons/types/vue"
+    ],
+    "lib": [
+      "es2023"
     ]
   },
   "extends": "@vue/tsconfig/tsconfig.dom.json",

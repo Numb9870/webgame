@@ -4,50 +4,61 @@
         <div class="game">
             <!-- 渲染地图 -->
             <div class="map-container">
+                <!-- 游戏内容 -->
                 <div class="map-content">
                     <div :class="'map-item map-item-style-' + `${item}`" :data-index="i" v-for="(item, i) in map"
                         :key="i">
                         {{ renderItem(item) }}
                     </div>
                 </div>
+                <!-- 失败界面 -->
                 <div v-if="fail" class="map-fail">
                     <button class="restart-button" @click="snake.restart()">
-                        <span>重新开始</span>
+                        <span>{{ '(R)' + t('game_terms.restart') }}</span>
                     </button>
                 </div>
             </div>
             <div class="map-info">
                 <div class="w-full flex flex-wrap gap-2 justify-center">
-                    <button class="keyword-button" :disabled="fail" @click="snake.start()">O(开始)</button>
-                    <button class="keyword-button" :disabled="fail" @click="snake.stop()">P(停止)</button>
+                    <!-- 开始/停止按钮 -->
+                    <button class="keyword-button" :disabled="fail" @click="snake.start()">
+                        {{ 'O(' + t('game_terms.start') + ')' }}
+                    </button>
+                    <button class="keyword-button" :disabled="fail" @click="snake.stop()">
+                        {{ 'P(' + t('game_terms.stop') + ')' }}
+                    </button>
                 </div>
+                <!-- 游戏信息1 -->
                 <div class="w-full flex pl-3 border border-gray-400">
                     <ul>
-                        <li>地图大小：{{ map_width }} * {{ map_height }}</li>
-                        <li>游戏等级：{{ snake.level }}</li>
-                        <li>游戏速度：{{ snake.speed }}</li>
-                        <li>游戏分数：{{ snake.score }}</li>
-                        <li>游戏步骤：{{ snake.step }}</li>
-                        <li>游戏用时：{{ snake.startTime == 0 ? 0 : calDuration(snake.startTime) }}</li>
-                        <li>下一级分数：{{ Math.abs(snake.nextLevel[snake.level - 1] - snake.score) }}</li>
-                        <li>历史最高分：{{ snake.score }}</li>
+                        <li>{{ t('GlutonousSnake.map_size') }} {{ map_width }} * {{ map_height }}</li>
+                        <li>{{ t('GlutonousSnake.game_level') }} {{ snake.level }}</li>
+                        <li>{{ t('GlutonousSnake.game_speed') }} {{ snake.speed }}</li>
+                        <li>{{ t('GlutonousSnake.game_score') }} {{ snake.score }}</li>
+                        <li>{{ t('GlutonousSnake.game_step') }} {{ snake.step }}</li>
+                        <li>{{ t('GlutonousSnake.game_use_time') }} {{ snake.startTime == 0 ? 0 :
+                            calDuration(snake.startTime) }}</li>
+                        <li>{{ t('GlutonousSnake.next_level_score') }} {{ Math.abs(snake.nextLevel[snake.level - 1] -
+                            snake.score) }}</li>
+                        <li>{{ t('GlutonousSnake.history_heigh_score') }} {{ snake.score }}</li>
                     </ul>
                 </div>
-                <div class="w-full text-lg font-bold">加速蓄力条</div>
+                <!-- 游戏信息2 -->
+                <div class="w-full text-lg font-bold">{{ t('GlutonousSnake.acceleration_bar') }} </div>
                 <n-progress class="w-full" type="line" status="warning" :percentage="snake.speedUpReady * 10"
                     indicator-placement="inside" />
-                <div class="w-full text-lg font-bold">汽油生成概率</div>
+                <div class="w-full text-lg font-bold">{{ t('GlutonousSnake.oil_generation_probability') }}</div>
                 <n-progress class="w-full" type="line" status="error"
                     :percentage="snake.gasoline >= 0 ? 0 : snake.gasolineRate * 10" indicator-placement="inside" />
             </div>
         </div>
         <div class="game-info">
-            <n-descriptions title="游戏规则：" label-placement="left" bordered :column="3">
+            <n-descriptions :title="t('game_terms.gameRule')" label-placement="left" bordered :column="3">
                 <n-descriptions-item label="✅">
                     移动：WSAD 或 ↑↓←→ 键控制移动
                 </n-descriptions-item>
                 <n-descriptions-item label="✅">
-                    长按方向键可以加速
+                    长按方向键可以加速（正常速度 * 3）
                 </n-descriptions-item>
                 <n-descriptions-item label="✅">
                     🐭 图标是食物
@@ -59,7 +70,7 @@
                     ⌛ 图标无敌
                 </n-descriptions-item>
                 <n-descriptions-item label="✅">
-                    🎪 图标是随机传送
+                    🧊 图标是随机传送
                 </n-descriptions-item>
                 <n-descriptions-item label="⛔">
                     🐚 图标是障碍物（无敌时间可以消除）
@@ -77,13 +88,61 @@
 
 <script setup lang='ts'>
 import { calDuration } from '@/utils/calculate'
+import { useI18n } from 'vue-i18n'
+
+/* *********************************************实例化********************************************* */
+const { t, setLocaleMessage, getLocaleMessage } = useI18n()
+
+/* *********************************************国际化********************************************* */
+// 定义命名空间语言包：
+const currentMessages = {
+    'zh-CN': {
+        "GlutonousSnake": {
+            "map_size": "地图大小：",
+            "game_level": "游戏等级：",
+            "game_speed": "游戏速度：",
+            "game_score": "游戏分数：",
+            "game_step": "游戏步骤：",
+            "game_use_time": "游戏用时：",
+            "next_level_score": "下一级分数：",
+            "history_heigh_score": "历史最高分：",
+            "acceleration_bar": "加速蓄力条",
+            "oil_generation_probability": "汽油生成概率",
+        }
+    },
+    'en-US': {
+        "GlutonousSnake": {
+            "map_size": "map size：",
+            "game_level": "game level：",
+            "game_speed": "game speed：",
+            "game_score": "game score：",
+            "game_step": "game step：",
+            "game_use_time": "game use time：",
+            "next_level_score": "next level score：",
+            "history_heigh_score": "history heigh score：",
+            "acceleration_bar": "acceleration bar",
+            "oil_generation_probability": "oil generation probability",
+        }
+    },
+}
+
+// 加载命名空间语言包，合并到现有语言包
+for (const lang of Object.keys(currentMessages)) {
+    const existingMessages = getLocaleMessage(lang) || {};
+    setLocaleMessage(lang, {
+        ...existingMessages,
+        ...currentMessages[lang as keyof typeof currentMessages],
+    });
+}
+
 // 渲染地图物品类型
 const renderItem = (item: number) => {
     if (item == 3) return '🐭'
     if (item == 4) return '⛽'
     if (item == 5) return '⌛'
-    if (item == 6) return '🎪'
+    if (item == 6) return '🧊'
     if (item == 7) return '🐚'
+    if (item == 8) return '🌈'
 }
 /**
  * 创建地图
@@ -92,6 +151,8 @@ const renderItem = (item: number) => {
  * 2 - 蛇头
  * 3 - 食物
  * 4 - 汽油
+ * 5 - 无敌
+ * 6 - 空间跳跃
  */
 // 地图长宽
 const map_width = 50
@@ -111,6 +172,8 @@ const map = reactive<number[]>([])
 class Snake {
     // 游戏id
     #gameId: number = 0
+    // 游戏状态
+    #status: 'start' | 'stop' = 'stop'
     // 游戏运行时间
     startTime: number = 0
     // 游戏行动时间
@@ -128,18 +191,18 @@ class Snake {
     // 等级
     level: number = 1
     // 升级分数
-    nextLevel: number[] = [4, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+    nextLevel: number[] = [4, 10, 20, 30, 40, 50, 60, 70, 80, 90]
     // 游戏分数
     score: number = this.#body.length
     // 蛇速度
     speed: number = 1
     // 速度缓存
     #speedCache: number = 0
-    // 加速预备
+    // 加速预备 -- 生成加速进度条
     speedUpReady: number = 0
     // 加速标识
     #speedUp: boolean = false
-    // 游戏难度(表现数来的就是 = 难度/速度)
+    // 游戏难度(表现出来的就是 = 难度/速度 数值越小，速度越快)
     #difficulty: number = 300
     // 食物坐标
     #food: number = 4
@@ -147,6 +210,16 @@ class Snake {
     gasoline: number = -1
     // 生成汽油的概率
     gasolineRate: number = 2
+    // 空间跳跃坐标(表现出来的就是生成率 = 游戏分数 % 4)
+    #spaceJump: [number, number] = [-1, -1]
+    // 生成跳跃的频率(0 ~ 1，0表示可以生成，1表示不可以生成)
+    #spaceJumpRate: number = 0
+    // 空间跳跃的身体
+    #spaceJumpBody: number[] = []
+    // 空间跳跃进行到步骤（变更蛇头后面的位置）
+    #spaceJumpStep: number = 1
+    // 空间跳跃门的选定
+    #spaceJumpDoor: number = -1
     // 存活
     #alive: boolean = true
     // 键盘松开事件
@@ -170,6 +243,26 @@ class Snake {
         this.#drawSnake()
         // 生成汽油
         this.#generateGasoline()
+        // 键盘按下事件
+        window.addEventListener('keydown', (e) => {
+            const keyword = e.key.toLowerCase()
+            switch (keyword) {
+                case 'o':
+                    if (this.#status == 'stop')
+                        this.start()
+                    break;
+                case 'p':
+                    if (this.#status == 'start')
+                        this.stop()
+                    break;
+                case 'r':
+                    this.restart()
+                    break;
+                default:
+                    break;
+            }
+        })
+
     }
 
     // 绘制食物
@@ -182,9 +275,9 @@ class Snake {
     #drawSnake() {
         // 蛇头在地图中用2表示，蛇身用1表示
         this.#body.forEach((item, index) => {
-            if (index == 0) {
+            if (index == 0) { // 蛇头
                 map[item] = 2
-            } else {
+            } else { // 蛇身
                 map[item] = 1
             }
         })
@@ -192,10 +285,12 @@ class Snake {
 
     // 移动地图边界判断
     #boundary() {
+
         // 获取蛇头部坐标
         const header = this.#body[0]
         // 计算下一次移动头部坐标
         let index = null;
+        // 不同方向不同处理
         switch (this.#direction) {
             case 'up':
                 // 移动边界判断
@@ -210,14 +305,8 @@ class Snake {
                     this.#body.slice(1, this.#body.length).includes(index) ? this.#alive = false : this.#alive = true
                 }
 
-                // 如果还存活，判断是否吃到食物
-                if (this.#alive) {
-                    // 判断是否吃到食物、道具
-                    this.#eat(header)
-                    // 移动蛇头
-                    this.#body.unshift(index)
-                };
-
+                // 如果还存活，判断是否吃到食物、道具
+                this.#alive ? this.#eat(header, index) : ''
                 break;
             case 'down':
 
@@ -234,12 +323,8 @@ class Snake {
                     this.#body.slice(1, this.#body.length).includes(index) ? this.#alive = false : this.#alive = true
                 }
 
-                if (this.#alive) {
-                    // 判断是否吃到食物
-                    this.#eat(header)
-                    // 移动蛇头
-                    this.#body.unshift(index)
-                }
+                // 如果还存活，判断是否吃到食物、道具
+                this.#alive ? this.#eat(header, index) : ''
                 break;
             case 'left':
                 // 移动边界判断
@@ -255,12 +340,8 @@ class Snake {
                     this.#body.slice(1, this.#body.length).includes(index) ? this.#alive = false : this.#alive = true
                 }
 
-                if (this.#alive) {
-                    // 判断是否吃到食物
-                    this.#eat(header)
-                    // 移动蛇头
-                    this.#body.unshift(index)
-                }
+                // 如果还存活，判断是否吃到食物、道具
+                this.#alive ? this.#eat(header, index) : ''
                 break;
             case 'right':
 
@@ -277,42 +358,40 @@ class Snake {
                     this.#body.slice(1, this.#body.length).includes(index) ? this.#alive = false : this.#alive = true
                 }
 
-                if (this.#alive) {
-                    // 判断是否吃到食物
-                    this.#eat(header)
-                    // 移动蛇头
-                    this.#body.unshift(index)
-                }
+                // 如果还存活，判断是否吃到食物、道具
+                this.#alive ? this.#eat(header, index) : ''
                 break;
         }
+
+        // console.log(this);
     }
 
     // 判断是否吃到食物、道具
-    #eat(header: number) { // 吃到食物，身体将增长1格
-        if (header == this.#food) {
+    #eat(header: number, index: number) {
+
+        // 是否吃到食物
+        let eatFoodSymbol = false
+
+        /* ****************************************蛇尾处理**************************************** */
+
+        if (header == this.#food) { // 吃到食物，概率生成汽油
+
+            // 更变吃到食物标识
+            eatFoodSymbol = true
+
             // 分数增加
             this.score++
             // 是否升级
             this.#levelUp()
             // 再次生成食物（没法生成食物时，结束游戏）
             this.#generateFood()
-            // 再次生成汽油（概率生成，概率会不断增加）
-            if (Math.random() > (1 - this.gasolineRate / 10) && this.gasoline < 0) {
-                this.#generateGasoline()
-            } else {
-                this.gasolineRate++
-            }
-        } else { // 没有吃到食物
-            if (this.#bodyCache > 0) { // 如果有身体缓存，不删除尾巴
-                this.#bodyCache--
-            } else { // 更新尾巴地图数据，然后移除尾巴
-                map[this.#body[this.#body.length - 1]] = 0
-                this.#body.pop()
-            }
+
+            // 当地图没有汽油时，再次概率生成汽油(如果生成失败，概率增加)
+            this.gasoline < 0 && Math.random() > (1 - this.gasolineRate / 10) ? this.#generateGasoline() : this.gasolineRate++
+
         }
 
-        // 吃到汽油，身体将增长5格
-        if (header == this.gasoline) {
+        if (header == this.gasoline) { // 吃到汽油，身体将增长5格
             // 分数增加
             this.score = this.score + 5
             // 身体缓存
@@ -324,32 +403,112 @@ class Snake {
             // 重置概率
             this.gasolineRate = 2
         }
+
+        // 跳跃道具门1
+        if (header == this.#spaceJump[0]) { // 吃到跳跃道具，index坐标需要变更
+            // 头部坐标重新变更
+            index = this.#spaceJump[1]
+            // 空间身体缓存
+            this.#spaceJumpBody = this.#body.slice(1)
+            // 跳跃门记录
+            this.#spaceJumpDoor = 1
+        }
+
+        // 跳跃道具门2
+        if (header == this.#spaceJump[1]) { // 吃到跳跃道具，index坐标需要变更
+            // 头部坐标重新变更
+            index = this.#spaceJump[0]
+            // 空间身体缓存
+            this.#spaceJumpBody = this.#body.slice(1)
+            // 跳跃门记录
+            this.#spaceJumpDoor = 0
+        }
+
+
+        /* ****************************************蛇尾处理**************************************** */
+
+        if (eatFoodSymbol == false && this.#bodyCache <= 0 && this.#spaceJumpBody.length == 0) {
+            // 如果 没有吃到食物/没有身体缓存/没有空间身体 则更新地图数据后，移除尾巴，移动蛇头
+            map[this.#body[this.#body.length - 1]] = 0 // 清除尾巴所在地图的位置
+            this.#body.pop() // 移除尾巴
+            this.#body.unshift(index) // 移动蛇头
+            return;
+        } else if (eatFoodSymbol == true && this.#bodyCache <= 0 && this.#spaceJumpBody.length == 0) {
+            // 如果 吃到食物/没有身体缓存/没有空间身体 则尾巴存留，头部移动
+            this.#body.unshift(index) // 移动蛇头
+        } else if (eatFoodSymbol == false && this.#bodyCache > 0 && this.#spaceJumpBody.length == 0) {
+            // 如果 没有吃到食物/有身体缓存/没有空间身体 则尾巴保持不变，身体缓存减少，移动蛇头
+            this.#bodyCache-- // 身体缓存减少
+            this.#body.unshift(index) // 移动蛇头
+            return;
+        } else if (eatFoodSymbol == false && this.#bodyCache <= 0 && this.#spaceJumpBody.length > 0) {
+
+            console.log(this.#body);
+
+            // 如果 没有吃到食物/没有身体缓存/有空间身体 则进行更新地图数据、清除尾巴后，进行头部以及身体的空间移动
+            map[this.#body[this.#body.length - 1]] = 0 // 清除尾巴所在地图的位置
+            this.#body.pop() // 移除尾巴
+
+            if (this.#spaceJumpStep == 1) { // 先移动蛇头
+                this.#body.unshift(index)
+                this.#spaceJumpStep++
+            }
+
+            if (this.#spaceJumpStep !== 1) { // 后移蛇头和蛇身
+                // 移动蛇头
+                this.#body.unshift(index)
+                // 蛇身空间跳跃(变更蛇头后面的位置，同时记录空间跳跃的步骤)
+                this.#body[this.#spaceJumpStep - 1] = this.#spaceJump[this.#spaceJumpDoor]
+                this.#spaceJumpStep++
+                // 空间跳跃是否完成
+                if (this.#spaceJumpStep == this.#spaceJumpBody.length) {
+                    // 清空跳跃道具
+                    map[this.#spaceJump[0]] = 0 // 清除地图跳跃道具
+                    map[this.#spaceJump[1]] = 0 // 清除地图跳跃道具
+                    this.#spaceJumpStep = 1 // 重置跳跃步骤
+                    this.#spaceJumpBody = [] // 清空跳跃身体
+                    this.#spaceJumpDoor = -1 // 重置跳跃门
+                    this.#spaceJump = [-1, -1] // 重置跳跃道具
+                    this.#spaceJumpRate = 0 // 允许空间跳跃生成
+                }
+            }
+
+            return;
+        }
+
+
     }
 
     // 生成随机位置的食物，不与蛇身体、道具节点重叠
     #generateFood() {
-        // 计算地图中还有多少0
-        const count = map.filter(item => item == 0).length
-        // 剩余循坏次数
-        let count_loop = 0
-        // 生成食物坐标，不能与蛇身体节点重叠
+        // 计算地图中还有多少空白节点
+        const blankArea: number[] = map.flatMap((item, index) => item == 0 ? 0 : index)
+        // 空白数量
+        const count = blankArea.filter(item => item == 0).length
+        // 已经无法在地图上生成食物，则游戏结束，显示胜利界面
+        if (count <= 1) {
+            this.win = true
+            win.value = true
+            console.log("🚀 ~ Snake ~ #generateFood ~ win:", '胜利方式：无法生成食物')
+            this.stop()
+        }
+
+        // 从blankArea中空白数量 生成一个坐标（如果使用map【地图】循环会造成大量的密集型计算）
         for (let index = 0; index < count; index++) {
-            // 剩余次数不足
-            if (count_loop >= count) {
-                // 已经无法在地图上生成食物，则游戏结束，显示胜利界面
-                this.win = true
-                win.value = true
-                this.stop()
+            // 最后一次循环，强制生成
+            if (index == count - 1) {
+                // 拿到所有空白区域第一个坐标
+                const i = blankArea.findIndex(item => item == 0)
+                map[i] = 3
             }
             // 生成随机坐标
-            const random = Math.floor(Math.random() * map_width * map_height)
-            // 判断是否与蛇身体节点重叠
-            if (!this.#body.includes(random)) {
-                this.#food = random
+            const randomIndex = Math.floor(Math.random() * count)
+            // 判断坐标是否与蛇身体或者道具重叠
+            if (map[randomIndex] == 0) {
+                // 食物坐标赋值
+                this.#food = randomIndex
+                return
             }
-
-            // 每次循环次数增加
-            count_loop++
         }
 
     }
@@ -368,37 +527,98 @@ class Snake {
         Array.from({ length: map_height - 2 }, (_, i) => { array.push((i + 2) * 50 - 1) })
         // 取出地图四周空白的位置
         const commonArray = array.filter((item, _index) => map[item] == 0)
+        // 已经无法在地图界面边界上生成汽油，
+        if (commonArray.length == 0) return;
         // 取出一个空白周边索引
         const index = Math.floor(Math.random() * commonArray.length)
-        // 赋值给汽油位置
+        // 汽油坐标赋值
         this.gasoline = commonArray[index]
         // 绘制
         map[this.gasoline] = 4
     }
 
+    // 空间跳跃（时间段生成）
+    #generateSpaceJump() {
+
+        // 判断是否满足条件
+        if (this.score % 4 == 0 && this.#spaceJumpRate == 0) {
+
+            // 判断地图没有空间跳跃的位置
+            if (this.#spaceJump[0] == -1 && this.#spaceJump[1] == -1) {
+
+                // 计算地图中还有多少空白节点坐标
+                const blankArea: number[] = map.flatMap((item, index) => item == 0 ? 0 : index)
+                // 空白数量
+                const count = blankArea.filter(item => item == 0).length
+                // 已经无法在地图上生成空间门，则跳过
+                if (count <= 2) {
+                    this.win = true
+                    win.value = true
+                    console.log("🚀 ~ Snake ~ #generateFood ~ win:", '胜利方式：无法生成空间跳跃')
+                    this.stop()
+                }
+
+                // 随机获取两个空白位置(一定要是不同的位置，使用count减少循环次数)
+                for (let index = 0; index < count; index++) {
+                    // 随机获取一个值
+                    const index1 = Math.floor(Math.random() * count)
+                    // 再随机获取一个值
+                    const index2 = Math.floor(Math.random() * count)
+                    if (index1 !== index2) {
+                        this.#spaceJump = [index1, index2]
+                        break;
+                    }
+
+                    // 最后一次循环，则强制生成两个地点
+                    if (index == count - 1) {
+                        this.#spaceJump = [map[blankArea.findIndex(i => i == 0)], map[blankArea.findLastIndex(i => i == 0)]]
+                    }
+
+                }
+
+                // 绘制
+                map[this.#spaceJump[0]] = 6
+                map[this.#spaceJump[1]] = 6
+
+                // 禁止传送生成
+                this.#spaceJumpRate = 1
+
+            }
+
+        }
+
+    }
+
     // 升级逻辑
     #levelUp() {
         // 将下一等级的经验值更新
-        if (this.score >= this.nextLevel[this.speed - 1]) {
+        if (this.score >= this.nextLevel[this.level - 1]) {
             // 升级
             this.speed++
             this.level++
+            // 升级完成时，如果处于加速状态需要特殊处理速度缓存也要自增
+            if (this.#speedUp) {
+                this.#speedCache++
+                this.speed = this.level * 3
+            }
         }
     }
 
     // 核心交互
     #move() {
-        // 是否存活
-        if (!this.#alive) {
-            // 死亡，结束游戏，显示失败界面
-            this.fail = true
-            fail.value = true
-            this.stop()
-            return
-        }
 
         // 是否到达当前难度的时间点
         if (Date.now() - this.actionTime >= this.#difficulty / this.speed) {
+
+            // 是否存活
+            if (!this.#alive) {
+                // 死亡，结束游戏，显示失败界面
+                this.fail = true
+                fail.value = true
+                this.stop()
+                return
+            }
+
             // 记录当前时间
             this.actionTime = Date.now()
             // 改动变更方向的标识
@@ -407,7 +627,9 @@ class Snake {
             this.#boundary()
             // 移动完后绘制
             this.#drawFood()
-            this.#drawSnake()
+            this.#drawSnake();
+            // 检测是否需要生成空间跳跃
+            this.#generateSpaceJump()
             // 移动步骤增加
             this.step++
         }
@@ -418,13 +640,13 @@ class Snake {
     // 解释方向
     #explainDirection(key: string) {
         switch (key) {
-            case 'ArrowUp':
+            case 'arrowup':
                 return 'up'
-            case 'ArrowDown':
+            case 'arrowdown':
                 return 'down'
-            case 'ArrowLeft':
+            case 'arrowleft':
                 return 'left'
-            case 'ArrowRight':
+            case 'arrowright':
                 return 'right'
             case 'w':
                 return 'up'
@@ -441,10 +663,14 @@ class Snake {
 
     // 反方向阻止
     #stopReverseDirection(key: string) {
-        if (key === 'ArrowDown' && this.#direction === 'up') return true;
-        if (key === 'ArrowUp' && this.#direction === 'down') return true;
-        if (key === 'ArrowRight' && this.#direction === 'left') return true;
-        if (key === 'ArrowLeft' && this.#direction === 'right') return true;
+        if (key === 'arrowdown' && this.#direction === 'up') return true;
+        if (key === 'arrowup' && this.#direction === 'down') return true;
+        if (key === 'arrowright' && this.#direction === 'left') return true;
+        if (key === 'arrowleft' && this.#direction === 'right') return true;
+        if (key === 'w' && this.#direction === 'up') return true;
+        if (key === 's' && this.#direction === 'down') return true;
+        if (key === 'a' && this.#direction === 'right') return true;
+        if (key === 'd' && this.#direction === 'left') return true;
     }
 
     // 开始游戏
@@ -471,15 +697,18 @@ class Snake {
 
         // 按下键盘事件（改变移动方向，需要判断是不是蛇掉头，如果是掉头则保持原方向，判断是否需要加速）
         this.#keyDownHandler = (e) => {
+            // 处理大小写
+            const keyword = e.key.toLowerCase()
+
             // 如果是同方向，则加速
-            if (this.#direction === this.#explainDirection(e.key)) {
+            if (this.#direction === this.#explainDirection(keyword)) {
                 // 不松手就加速预备蓄力
                 this.speedUpReady < 10 ? this.speedUpReady++ : '';
                 // 到达蓄力值且没有加速
                 if (this.speedUpReady >= 10 && !this.#speedUp) {
                     // 加速标识开启
                     this.#speedUp = true
-                    // 缓存原速
+                    // 缓存原速(一旦缓存则只能在升级模块更改，否则会导致升级bug)
                     this.#speedCache = this.speed
                     // 提速3倍
                     this.speed = this.speed * 3
@@ -489,32 +718,32 @@ class Snake {
             }
 
             // 变更方向暂未结束且方向一致，则等待变更完成，或者按下其他方向键
-            if (!this.#chageDirection && this.#direction !== this.#explainDirection(e.key)) {
+            if (!this.#chageDirection && this.#direction !== this.#explainDirection(keyword)) {
                 // 改变方向
-                switch (e.key) {
+                switch (keyword) {
                     case 'w':
-                        this.#stopReverseDirection(e.key) ? '' : this.#direction = 'up'
+                        this.#stopReverseDirection(keyword) ? '' : this.#direction = 'up'
                         break;
                     case 's':
-                        this.#stopReverseDirection(e.key) ? '' : this.#direction = 'down'
+                        this.#stopReverseDirection(keyword) ? '' : this.#direction = 'down'
                         break;
                     case 'a':
-                        this.#stopReverseDirection(e.key) ? '' : this.#direction = 'left'
+                        this.#stopReverseDirection(keyword) ? '' : this.#direction = 'left'
                         break;
                     case 'd':
-                        this.#stopReverseDirection(e.key) ? '' : this.#direction = 'right'
+                        this.#stopReverseDirection(keyword) ? '' : this.#direction = 'right'
                         break;
-                    case 'ArrowUp':
-                        this.#stopReverseDirection(e.key) ? '' : this.#direction = 'up'
+                    case 'arrowup':
+                        this.#stopReverseDirection(keyword) ? '' : this.#direction = 'up'
                         break;
-                    case 'ArrowDown':
-                        this.#stopReverseDirection(e.key) ? '' : this.#direction = 'down'
+                    case 'arrowdown':
+                        this.#stopReverseDirection(keyword) ? '' : this.#direction = 'down'
                         break;
-                    case 'ArrowLeft':
-                        this.#stopReverseDirection(e.key) ? '' : this.#direction = 'left'
+                    case 'arrowleft':
+                        this.#stopReverseDirection(keyword) ? '' : this.#direction = 'left'
                         break;
-                    case 'ArrowRight':
-                        this.#stopReverseDirection(e.key) ? '' : this.#direction = 'right'
+                    case 'arrowright':
+                        this.#stopReverseDirection(keyword) ? '' : this.#direction = 'right'
                         break;
                     case ' ':
                         break;
@@ -523,16 +752,19 @@ class Snake {
                 this.#chageDirection = true
 
             }
+
         }
 
         // 注册监听键盘事件
         window.addEventListener('keyup', this.#keyUpHandler)
         window.addEventListener('keydown', this.#keyDownHandler)
+
         /* ******************开始游戏****************** */
-        // 记录开始时间和行动时间
+        // 记录游戏状态、开始时间和行动时间
         const time = Date.now()
         this.startTime = time
         this.actionTime = time
+        this.#status = 'start'
         // 运行游戏
         this.#move()
     }
@@ -540,6 +772,7 @@ class Snake {
     // 停止游戏
     stop() {
         // 取消运行
+        this.#status = 'stop'
         cancelAnimationFrame(this.#gameId)
         // 取消监听键盘注册事件
         window.removeEventListener('keyup', this.#keyUpHandler)
@@ -548,6 +781,9 @@ class Snake {
 
     // 重新开始
     restart() {
+        // 如果游戏正在运行，则不执行
+        if (this.#status === 'start') return;
+
         map.length = 0
         // 初始化地图
         Array.from({ length: map_height * map_width }, (_, _i) => { map.push(0) })
@@ -716,6 +952,15 @@ const win = ref(false)
                 }
 
             }
+
+            // 空间们
+            .map-item-style-6 {
+                text-shadow:
+                    1px 1px 10px rgb(26, 255, 0),
+                    -1px -1px 10px rgb(26, 255, 0),
+                    1px -1px 10px rgb(26, 255, 0),
+                    -1px 1px 10px rgb(26, 255, 0)
+            }
         }
 
         // 游戏失败
@@ -734,7 +979,7 @@ const win = ref(false)
                 display: inline-block;
                 font-size: 15px;
                 font-weight: 600;
-                width: 120px;
+                width: 140px;
                 text-transform: uppercase;
                 cursor: pointer;
                 transform: skew(-21deg);

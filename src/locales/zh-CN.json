@@ -19,5 +19,11 @@
   },
   "popover": {
     "themeChange": "刷新页面时，会重新获取系统主题。"
+  },
+  "game_terms": {
+    "start": "开始",
+    "stop": "结束",
+    "restart": "重新开始",
+    "gameRule": "游戏规则"
   }
 }

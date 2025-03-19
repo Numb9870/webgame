@@ -5,7 +5,7 @@ import {
 } from 'vue-router';
 import { constantRoutes } from './constantRouters';
 
-console.log(import.meta.env.MODE);
+// console.log(import.meta.env.MODE);
 
 export const router = createRouter({
   history:
