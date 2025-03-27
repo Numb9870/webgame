@@ -406,9 +406,9 @@ class Snake {
 
         // 跳跃道具门1
         if (header == this.#spaceJump[0]) { // 吃到跳跃道具，index坐标需要变更
-            // 头部坐标重新变更
-            index = this.#spaceJump[1]
-            // 空间身体缓存
+            // 如果还没开始跳跃则需要头部坐标重新变更
+            this.#spaceJumpStep == 1 ? index = this.#spaceJump[1] : ''
+            // 将除了蛇身体存入空间缓存
             this.#spaceJumpBody = this.#body.slice(1)
             // 跳跃门记录
             this.#spaceJumpDoor = 1
@@ -416,9 +416,9 @@ class Snake {
 
         // 跳跃道具门2
         if (header == this.#spaceJump[1]) { // 吃到跳跃道具，index坐标需要变更
-            // 头部坐标重新变更
-            index = this.#spaceJump[0]
-            // 空间身体缓存
+            // 如果还没开始跳跃则需要头部坐标重新变更
+            this.#spaceJumpStep == 1 ? index = this.#spaceJump[0] : ''
+            // 将除了蛇身体存入空间缓存
             this.#spaceJumpBody = this.#body.slice(1)
             // 跳跃门记录
             this.#spaceJumpDoor = 0
@@ -427,55 +427,171 @@ class Snake {
 
         /* ****************************************蛇尾处理**************************************** */
 
-        if (eatFoodSymbol == false && this.#bodyCache <= 0 && this.#spaceJumpBody.length == 0) {
-            // 如果 没有吃到食物/没有身体缓存/没有空间身体 则更新地图数据后，移除尾巴，移动蛇头
-            map[this.#body[this.#body.length - 1]] = 0 // 清除尾巴所在地图的位置
-            this.#body.pop() // 移除尾巴
-            this.#body.unshift(index) // 移动蛇头
-            return;
-        } else if (eatFoodSymbol == true && this.#bodyCache <= 0 && this.#spaceJumpBody.length == 0) {
-            // 如果 吃到食物/没有身体缓存/没有空间身体 则尾巴存留，头部移动
-            this.#body.unshift(index) // 移动蛇头
-        } else if (eatFoodSymbol == false && this.#bodyCache > 0 && this.#spaceJumpBody.length == 0) {
-            // 如果 没有吃到食物/有身体缓存/没有空间身体 则尾巴保持不变，身体缓存减少，移动蛇头
-            this.#bodyCache-- // 身体缓存减少
-            this.#body.unshift(index) // 移动蛇头
-            return;
-        } else if (eatFoodSymbol == false && this.#bodyCache <= 0 && this.#spaceJumpBody.length > 0) {
+        /* 
+            1. 如果 吃到食物-没有身体缓存-没有空间身体 则尾巴留存，移动蛇头
+            2. 如果 吃到食物-没有身体缓存-有空间身体 则尾巴留存，移动蛇头，身体的空间移动
+            3. 如果 吃到食物-有身体缓存-没有空间身体 则尾巴留存，暂停身体缓存减少，移动蛇头
+            4. 如果 吃到食物-有身体缓存-有空间身体 则尾巴留存，暂停身体缓存减少，移动蛇头，身体的空间移动
+            5. 如果 没有吃到食物-没有身体缓存-没有空间身体 则清除尾巴所在地图的位置，移除尾巴，移动蛇头
+            6. 如果 没有吃到食物-没有身体缓存-有空间身体 则清除尾巴所在地图的位置，移除尾巴，移动蛇头，身体的空间移动
+            7. 如果 没有吃到食物-有身体缓存-没空间身体 则尾巴留存，身体缓存减少，移动蛇头
+            8. 如果 没有吃到食物-有身体缓存-有空间身体 则尾巴留存，暂停身体缓存减少，变更蛇头，身体的空间移动
+        */
+        if (eatFoodSymbol == true && this.#bodyCache <= 0 && this.#spaceJumpBody.length == 0) { // 1. 吃到食物-没有身体缓存-没有空间身体
 
-            console.log(this.#body);
+            /* 尾巴留存，移动蛇头 */
+            this.#body.unshift(index)
 
-            // 如果 没有吃到食物/没有身体缓存/有空间身体 则进行更新地图数据、清除尾巴后，进行头部以及身体的空间移动
-            map[this.#body[this.#body.length - 1]] = 0 // 清除尾巴所在地图的位置
-            this.#body.pop() // 移除尾巴
+        } else if (eatFoodSymbol == true && this.#bodyCache <= 0 && this.#spaceJumpBody.length > 0) { // 2. 吃到食物-没有身体缓存-有空间身体
 
-            if (this.#spaceJumpStep == 1) { // 先移动蛇头
+            /* 尾巴留存，移动蛇头，身体的空间移动 */
+
+            // 第一次跳跃先移动蛇头，不改动蛇身
+            if (this.#spaceJumpStep == 1) {
+                // 移动蛇头
                 this.#body.unshift(index)
+                // 记录空间跳跃的步骤
                 this.#spaceJumpStep++
+                return;
             }
 
-            if (this.#spaceJumpStep !== 1) { // 后移蛇头和蛇身
+            // 后续跳跃移动蛇头和蛇身
+            if (this.#spaceJumpStep > 1) {
                 // 移动蛇头
                 this.#body.unshift(index)
                 // 蛇身空间跳跃(变更蛇头后面的位置，同时记录空间跳跃的步骤)
                 this.#body[this.#spaceJumpStep - 1] = this.#spaceJump[this.#spaceJumpDoor]
                 this.#spaceJumpStep++
+
                 // 空间跳跃是否完成
                 if (this.#spaceJumpStep == this.#spaceJumpBody.length) {
                     // 清空跳跃道具
-                    map[this.#spaceJump[0]] = 0 // 清除地图跳跃道具
-                    map[this.#spaceJump[1]] = 0 // 清除地图跳跃道具
-                    this.#spaceJumpStep = 1 // 重置跳跃步骤
-                    this.#spaceJumpBody = [] // 清空跳跃身体
-                    this.#spaceJumpDoor = -1 // 重置跳跃门
-                    this.#spaceJump = [-1, -1] // 重置跳跃道具
-                    this.#spaceJumpRate = 0 // 允许空间跳跃生成
+                    this.#clearSpaceJump()
                 }
+
+                return;
             }
 
-            return;
-        }
 
+
+        } else if (eatFoodSymbol == true && this.#bodyCache > 0 && this.#spaceJumpBody.length == 0) { // 3. 吃到食物-有身体缓存-没有空间身体
+
+            /* 尾巴留存，暂停身体缓存减少，移动蛇头 */
+            this.#body.unshift(index)
+
+        } else if (eatFoodSymbol == true && this.#bodyCache > 0 && this.#spaceJumpBody.length > 0) { // 4. 吃到食物-有身体缓存-有空间身体
+
+            /* 尾巴留存，暂停身体缓存减少，移动蛇头，身体的空间移动 */
+
+            // 第一次跳跃先移动蛇头，不改动蛇身
+            if (this.#spaceJumpStep == 1) {
+                // 移动蛇头
+                this.#body.unshift(index)
+                // 记录空间跳跃的步骤
+                this.#spaceJumpStep++
+                return;
+            }
+
+            // 后续跳跃移动蛇头和蛇身
+            if (this.#spaceJumpStep > 1) {
+                // 移动蛇头
+                this.#body.unshift(index)
+                // 蛇身空间跳跃(变更蛇头后面的位置，同时记录空间跳跃的步骤)
+                this.#body[this.#spaceJumpStep - 1] = this.#spaceJump[this.#spaceJumpDoor]
+                this.#spaceJumpStep++
+
+                // 空间跳跃是否完成
+                if (this.#spaceJumpStep == this.#spaceJumpBody.length) {
+                    // 清空跳跃道具
+                    this.#clearSpaceJump()
+                }
+
+                return;
+            }
+
+        } else if (eatFoodSymbol == false && this.#bodyCache <= 0 && this.#spaceJumpBody.length == 0) { // 5. 没有吃到食物-没有身体缓存-没有空间身体
+
+            /* 清除尾巴所在地图的位置，移除尾巴，移动蛇头 */
+            map[this.#body[this.#body.length - 1]] = 0 // 清除尾巴所在地图的位置
+            this.#body.pop() // 移除尾巴
+            this.#body.unshift(index) // 移动蛇头
+
+        } else if (eatFoodSymbol == false && this.#bodyCache <= 0 && this.#spaceJumpBody.length > 0) { // 6. 没有吃到食物-没有身体缓存-有空间身体
+
+            // console.log('目标坐标:' + index);
+            // console.log('空间坐标:' + this.#spaceJump);
+            // console.log('蛇原本坐标:' + this.#body);
+
+            map[this.#body[this.#body.length - 1]] = 0 // 清除尾巴所在地图的位置
+            this.#body.pop() // 移除尾巴
+
+            // 第一次跳跃先移动蛇头，不改动蛇身
+            if (this.#spaceJumpStep == 1) {
+                // 移动蛇头
+                this.#body.unshift(index)
+                // 记录空间跳跃的步骤
+                this.#spaceJumpStep++
+                // console.log('蛇变更坐标:' + this.#body);
+                return;
+            }
+
+            // 后续跳跃移动蛇头和蛇身
+            if (this.#spaceJumpStep > 1) {
+
+                // 移动蛇头
+                this.#body.unshift(index)
+                // 蛇身空间跳跃(变更蛇头后面的位置，同时记录空间跳跃的步骤)
+                this.#body[this.#spaceJumpStep - 1] = this.#spaceJump[this.#spaceJumpDoor]
+                this.#spaceJumpStep++
+                // console.log('蛇变更坐标:' + this.#body);
+                // 空间跳跃是否完成
+                if (this.#spaceJumpStep == this.#spaceJumpBody.length) {
+                    // 清空跳跃道具
+                    this.#clearSpaceJump()
+                }
+
+                return;
+
+            }
+
+        } else if (eatFoodSymbol == false && this.#bodyCache > 0 && this.#spaceJumpBody.length == 0) { // 7. 没有吃到食物-有身体缓存-没空间身体
+
+            /* 尾巴留存，身体缓存减少，移动蛇头 */
+            this.#bodyCache--
+            this.#body.unshift(index)
+
+        } else if (eatFoodSymbol == false && this.#bodyCache > 0 && this.#spaceJumpBody.length > 0) { // 8. 没有吃到食物-有身体缓存-有空间身体
+
+            /* 尾巴留存，身体缓存减少，空间跳跃，移动蛇头 */
+            this.#bodyCache--
+
+            // 第一次跳跃先移动蛇头，不改动蛇身
+            if (this.#spaceJumpStep == 1) {
+                // 移动蛇头
+                this.#body.unshift(index)
+                // 记录空间跳跃的步骤
+                this.#spaceJumpStep++
+                return;
+            }
+
+            // 后续跳跃移动蛇头和蛇身
+            if (this.#spaceJumpStep > 1) {
+                // 移动蛇头
+                this.#body.unshift(index)
+                // 蛇身空间跳跃(变更蛇头后面的位置，同时记录空间跳跃的步骤)
+                this.#body[this.#spaceJumpStep - 1] = this.#spaceJump[this.#spaceJumpDoor]
+                this.#spaceJumpStep++
+
+                // 空间跳跃是否完成
+                if (this.#spaceJumpStep == this.#spaceJumpBody.length) {
+                    // 清空跳跃道具
+                    this.#clearSpaceJump()
+                }
+
+                return;
+            }
+
+        }
 
     }
 
@@ -587,6 +703,18 @@ class Snake {
 
         }
 
+    }
+
+    // 清空跳跃道具
+    #clearSpaceJump() {
+        // 清空跳跃道具
+        map[this.#spaceJump[0]] = 0 // 清除地图跳跃道具
+        map[this.#spaceJump[1]] = 0 // 清除地图跳跃道具
+        this.#spaceJumpStep = 1 // 重置跳跃步骤
+        this.#spaceJumpBody = [] // 清空跳跃身体
+        this.#spaceJumpDoor = -1 // 重置跳跃门
+        this.#spaceJump = [-1, -1] // 重置跳跃道具坐标
+        this.#spaceJumpRate = 0 // 允许空间跳跃生成
     }
 
     // 升级逻辑
